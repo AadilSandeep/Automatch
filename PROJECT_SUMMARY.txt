@@ -1,0 +1,41 @@
+# AutoMatch - Project Presentation Summary
+
+## 1. Project Overview
+AutoMatch is an intelligent vehicle recommendation system that translates user lifestyle habits and budget constraints into technical vehicle specifications to provide personalized recommendations.
+
+## 2. Technology Stack
+*   **Frontend**: Streamlit (Python-based interactive web framework).
+*   **Backend/Logic**: Python 3.x.
+*   **Machine Learning**: Scikit-Learn (Random Forest, CART, Cosine Similarity).
+*   **Data Handling**: Pandas & NumPy for data cleaning and numeric extraction.
+
+## 3. Core Architecture (Modular OOP)
+*   src/app.py: UI Layer & Input Handling.
+*   src/recommender.py: Orchestration of filtering and ranking logic.
+*   src/models.py: Machine Learning model definitions and training.
+*   src/data_loader.py: Data cleaning, preprocessing, and feature engineering.
+
+## 4. The Recommendation Engine (Two-Stage Process)
+
+### Stage 1: Classification (Filtering)
+We use Machine Learning to ensure the user only sees cars they can actually afford.
+*   **Random Forest (RF)**: Our primary model used for high-accuracy classification of cars into budget buckets (Low, Mid, High). It's robust and prevents overfitting.
+*   **CART (Decision Tree)**: A structural model used for explainability. It helps define clear logical rules for why a car belongs to a certain class.
+
+### Stage 2: Ranking (Personalization)
+Once filtered, we find the "perfect match" within that budget.
+*   **Cosine Similarity**: This is the mathematical heart of the project. It treats cars and user preferences as vectors in a multi-dimensional space.
+*   **Mechanism**: It calculates the "angle" between what the user wants and what the car offers. A higher score means the car's engine, mileage, and utility perfectly align with the user's lifestyle.
+
+## 5. Key Technical Highlights
+*   **Lifestyle-to-Specs Mapping**: Automatically converts "Family Trips" or "Off-roading" into technical requirements like high seating capacity or high engine power.
+*   **Robust Preprocessing**: The system automatically cleans messy CSV data, extracts numbers from strings (e.g., "15.5 kmpl" -> 15.5), and imputes missing values using median statistics.
+*   **Explainability**: Every recommendation includes a "Why this car?" snippet to build user trust.
+
+## 6. Likely Guide Questions & Answers
+*   **Q: Why use Cosine Similarity for ranking?**
+    *   *A: Because it focuses on the direction/profile of features rather than just absolute size, making it perfect for comparing "lifestyle profiles."*
+*   **Q: Why combine Random Forest and CART?**
+    *   *A: RF gives us the performance/accuracy, while CART gives us the interpretability (the "why").*
+*   **Q: How do you handle missing engine data?**
+    *   *A: We use median imputation for stability and have fallback logic to estimate mileage based on engine displacement (CC).*
