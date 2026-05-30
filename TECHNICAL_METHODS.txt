@@ -179,11 +179,12 @@ the final prediction model.
          of the budget tier.
 
   Accuracy After Feature Reduction:
-    - Random Forest Budget Classification Accuracy: 99.58%
-    - This high accuracy after reduction confirms that the removed 120 features
-      were predominantly noise or redundant with the retained 99 and that the
-      SelectFromModel algorithm correctly identified the truly discriminative
-      features.
+    - We use a strict evaluation protocol (Stratified 5-Fold Cross-Validation)
+      to avoid test-set data leakage. The budget bins are learned only from the
+      training fold and applied to the test fold.
+    - This ensures that our feature reduction and Random Forest model report
+      realistic generalization accuracy, cleanly separating the "evaluation"
+      phase from the "production/app" phase where we train on all data.
 
 
 --------------------------------------------------------------------------------

@@ -8,6 +8,8 @@ from sklearn.feature_selection import VarianceThreshold, SelectFromModel
 from sklearn.ensemble import RandomForestClassifier
 import pandas as pd
 import numpy as np
+import joblib
+import os
 
 class VehicleClassifier:
     def __init__(self, df):
@@ -31,7 +33,7 @@ class VehicleClassifier:
         
         # Dynamically classify columns by data types
         numerical_cols = self.X.select_dtypes(include=['int64', 'float64']).columns.tolist()
-        categorical_cols_raw = self.X.select_dtypes(include=['object', 'category']).columns.tolist()
+        categorical_cols_raw = self.X.select_dtypes(include=['object', 'category', 'str']).columns.tolist()
         
         # Drop high-cardinality categorical features (noise) heuristically to prevent OHE explosion
         categorical_cols = [col for col in categorical_cols_raw if self.X[col].nunique() < 30]
@@ -98,3 +100,26 @@ class VehicleClassifier:
         importances = self.rf_model.named_steps['classifier'].feature_importances_
         
         return dict(zip(final_features, importances))
+
+    def save_model(self, model_dir="models"):
+        """Saves the trained models to disk."""
+        os.makedirs(model_dir, exist_ok=True)
+        if self.rf_model:
+            joblib.dump(self.rf_model, os.path.join(model_dir, "rf_model.joblib"))
+        if self.cart_model:
+            joblib.dump(self.cart_model, os.path.join(model_dir, "cart_model.joblib"))
+            
+    def load_model(self, model_dir="models"):
+        """Loads trained models from disk if they exist."""
+        rf_path = os.path.join(model_dir, "rf_model.joblib")
+        cart_path = os.path.join(model_dir, "cart_model.joblib")
+        
+        loaded = False
+        if os.path.exists(rf_path):
+            self.rf_model = joblib.load(rf_path)
+            loaded = True
+        if os.path.exists(cart_path):
+            self.cart_model = joblib.load(cart_path)
+            
+        return loaded
+

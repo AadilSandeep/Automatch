@@ -73,12 +73,7 @@ class DataLoader:
         self.df = self.df.dropna(axis=1, thresh=thresh)
 
         
-        # Create Budget Class
-        self.df["Budget_Class"] = pd.qcut(
-            self.df["Ex-Showroom_Price"],
-            q=3,
-            labels=["Low", "Mid", "High"]
-        )
+
         
         # Fill missing values for ranking features with median (safe fallback)
         rank_features = ["Mileage", "Seating_Capacity", "Power", "Displacement"]

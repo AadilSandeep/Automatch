@@ -110,7 +110,7 @@ with col1:
         user_prefs = {
             "budget": budget,
             "fuel": fuel,
-            "body": body,
+            "body": inferred_specs.get('body', body),
             "mileage": inferred_specs.get('mileage', 15.0),
             "seats": inferred_specs.get('seats', 5),
             "power": inferred_specs.get('power', 100.0)

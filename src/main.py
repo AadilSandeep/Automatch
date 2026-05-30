@@ -84,10 +84,8 @@ cart_model = Pipeline([
     ('classifier', DecisionTreeClassifier(max_depth=4, random_state=42))
 ])
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, stratify=y, random_state=42)
-rf_model.fit(X_train, y_train)
-cart_model.fit(X_train, y_train)
-
+# NOTE: Evaluation logic (train_test_split, cross-validation) has been moved to src/evaluate_model.py.
+# This script is the production app flow.
 print("\n" + "="*50)
 print(" INTELLIGENT VEHICLE RECOMMENDATION SYSTEM")
 print("="*50)
@@ -115,6 +113,7 @@ u_power = get_input("   - Minimum Power (BHP) [Optional]: ", 100.0)
 u_cc = 1200.0 if u_mileage > 18 else 1500.0 
 u_torque = 110.0 if u_power < 90 else 150.0
 
+# Production fit on all available data for final recommendations
 rf_model.fit(X, y)
 df["Predicted_Budget_Class"] = rf_model.predict(X)
 
